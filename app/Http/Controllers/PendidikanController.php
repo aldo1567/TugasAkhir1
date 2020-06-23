@@ -15,6 +15,8 @@ class PendidikanController extends Controller
     public function index()
     {
         //
+        $data=Pendidikan::all();
+        return view('pages.pendidikan.index',compact('data'));
     }
 
     /**
@@ -36,6 +38,11 @@ class PendidikanController extends Controller
     public function store(Request $request)
     {
         //
+        $validateData=$request->validate([
+            'nama_pendidikan'=>'required|unique:pendidikans'
+        ]);
+        Pendidikan::create($validateData);
+        return redirect()->route('pendidikan.index');
     }
 
     /**
@@ -70,6 +77,11 @@ class PendidikanController extends Controller
     public function update(Request $request, Pendidikan $pendidikan)
     {
         //
+        $validateData=$request->validate([
+            'nama_pendidikan'=>'required|unique:pendidikans,nama_pendidikan,'.$pendidikan->id
+        ]);
+        $pendidikan->update($validateData);
+        return redirect()->route('pendidikan.index');
     }
 
     /**
@@ -81,5 +93,7 @@ class PendidikanController extends Controller
     public function destroy(Pendidikan $pendidikan)
     {
         //
+        $pendidikan->delete();
+        return redirect()->route('pendidikan.index');
     }
 }

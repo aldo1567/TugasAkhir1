@@ -17,6 +17,7 @@
 
   <!-- Custom styles for this template-->
 <link href="{{asset('admin/css/sb-admin-2.min.css')}}" rel="stylesheet">
+@yield('data-tables-css')
 
 </head>
 
@@ -41,6 +42,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            @yield('button-add')
           </div>
 
           @yield('content')

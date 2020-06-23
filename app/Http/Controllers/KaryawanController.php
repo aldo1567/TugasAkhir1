@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use App\Karyawan;
 use Illuminate\Http\Request;
 
+use App\Status;
+use App\Jabatan;
+use App\Pendidikan;
+use App\Telepon;
+
+use Datatables;
+
 class KaryawanController extends Controller
 {
     /**
@@ -15,6 +22,12 @@ class KaryawanController extends Controller
     public function index()
     {
         //
+        $data=Karyawan::all();
+        $status=Status::all();
+        $jabatan=Jabatan::all();
+        $pendidikan=Pendidikan::all();
+        return view('pages.karyawan.index',compact('data','status','jabatan','pendidikan'));
+        
     }
 
     /**
@@ -36,6 +49,19 @@ class KaryawanController extends Controller
     public function store(Request $request)
     {
         //
+        $validateData=$request->validate([
+            'nama_Karyawan'=>'required|min:3|max:25|unique:karyawans',
+            'gender'=>'required|in:P,L',
+            'umur'=>'required|integer',
+            'status_id'=>'required',
+            'jabatan_id'=>'required',
+            'pendidikan_id'=>'required',
+        ]);
+        $karyawan=Karyawan::create($validateData);
+        $telp=new Telepon;
+        $telp->no_hp=$request->input('no_hp');
+        $karyawan->telepon()->save($telp);
+        return redirect()->route('karyawan.index');
     }
 
     /**
@@ -70,6 +96,19 @@ class KaryawanController extends Controller
     public function update(Request $request, Karyawan $karyawan)
     {
         //
+        $validateData=$request->validate([
+            'nama_Karyawan'=>'required|min:3|max:25|unique:karyawans,nama_Karyawan,'.$karyawan->id,
+            'gender'=>'required|in:P,L',
+            'umur'=>'required|integer',
+            'status_id'=>'required',
+            'jabatan_id'=>'required',
+            'pendidikan_id'=>'required',
+        ]);
+        $karyawan->update($validateData);
+        $telp=$karyawan->telepon;
+        $telp->no_hp=$request->input('no_hp');
+        $karyawan->telepon()->save($telp);
+        return redirect()->route('karyawan.index');
     }
 
     /**
@@ -81,5 +120,7 @@ class KaryawanController extends Controller
     public function destroy(Karyawan $karyawan)
     {
         //
+        $karyawan->delete();
+        return redirect()->route('karyawan.index');
     }
 }
