@@ -22,7 +22,7 @@ class KaryawanController extends Controller
     public function index()
     {
         //
-        $data=Karyawan::all();
+        $data=Karyawan::all()->sortByDesc('id');
         $status=Status::all();
         $jabatan=Jabatan::all();
         $pendidikan=Pendidikan::all();
@@ -61,7 +61,10 @@ class KaryawanController extends Controller
         $telp=new Telepon;
         $telp->no_hp=$request->input('no_hp');
         $karyawan->telepon()->save($telp);
-        return redirect()->route('karyawan.index');
+        return redirect()->route('karyawan.index')->with([
+            'css'=>'alert alert-success',
+            'status'=>"Data Karyawan {$request->nama_Karyawan} Berhasil Ditambah ",
+            ]);
     }
 
     /**
@@ -108,7 +111,10 @@ class KaryawanController extends Controller
         $telp=$karyawan->telepon;
         $telp->no_hp=$request->input('no_hp');
         $karyawan->telepon()->save($telp);
-        return redirect()->route('karyawan.index');
+        return redirect()->route('karyawan.index')->with([
+            'css'=>'alert alert-warning',
+            'status'=>"Data Karyawan {$request->nama_Karyawan} Berhasil Diupdate ",
+            ]);
     }
 
     /**
@@ -121,6 +127,9 @@ class KaryawanController extends Controller
     {
         //
         $karyawan->delete();
-        return redirect()->route('karyawan.index');
+        return redirect()->route('karyawan.index')->with([
+            'css'=>'alert alert-danger',
+            'status'=>"Data Karyawan {$karyawan->nama_Karyawan} Berhasil Dihapus ",
+            ]);
     }
 }

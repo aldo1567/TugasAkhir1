@@ -43,7 +43,10 @@ class JabatanController extends Controller
             'nama_jabatan'=>'required|unique:jabatans',
         ]);
         Jabatan::create($validateData);
-        return redirect()->route('jabatan.index');
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-success',
+            'status'=>"Data Jabatan {$request->nama_jabatan} Berhasil Ditambah ",
+            ]);
     }
 
     /**
@@ -86,7 +89,10 @@ class JabatanController extends Controller
             'nama_jabatan'=>'required|unique:jabatans,nama_jabatan,'.$jabatan->id,
         ]);
         $jabatan->update($validateData);
-        return redirect()->route('jabatan.index');
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-warning',
+            'status'=>"Data Jabatan {$request->nama_jabatan} Berhasil Diupdate ",
+            ]);
     }
 
     /**
@@ -99,6 +105,9 @@ class JabatanController extends Controller
     {
         //
         $jabatan->delete();
-        return redirect()->route('jabatan.index');
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-danger',
+            'status'=>"Data Jabatan {$jabatan->nama_jabatan} Berhasil Ditambah ",
+            ]);
     }
 }

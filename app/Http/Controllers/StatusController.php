@@ -42,7 +42,10 @@ class StatusController extends Controller
             'status_karyawan'=>'required|unique:statuses'
         ]);
         Status::create($validateData);
-        return redirect()->route('status.index');
+        return redirect()->route('status.index')->with([
+            'css'=>'alert alert-success',
+            'status'=>"Data Status {$request->status_karyawan} Berhasil Ditambah ",
+            ]);
     }
 
     /**
@@ -81,7 +84,10 @@ class StatusController extends Controller
             'status_karyawan'=>'required|unique:statuses,status_karyawan,'.$status->id
         ]);
         $status->update($validateData);
-        return redirect()->route('status.index');
+        return redirect()->route('status.index')->with([
+            'css'=>'alert alert-warning',
+            'status'=>"Data Status {$request->status_karyawan} Berhasil Diubah ",
+            ]);
     }
 
     /**
@@ -94,6 +100,9 @@ class StatusController extends Controller
     {
         //
         $status->delete();
-        return redirect()->route('status.index');
+        return redirect()->route('status.index')->with([
+            'css'=>'alert alert-danger',
+            'status'=>"Data Status {$status->status_karyawan} Berhasil Dihapus ",
+            ]);
     }
 }

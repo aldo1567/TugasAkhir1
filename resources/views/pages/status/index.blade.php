@@ -2,6 +2,13 @@
 @section('status','active')
 @section('content')
 <div class="container">
+    @section('notif')
+    @if(session('status'))
+        <div class="{{ session('css') }}">
+            {{ session('status') }}
+        </div>
+    @endif
+    @endsection
     @section('button-add')
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add_status">

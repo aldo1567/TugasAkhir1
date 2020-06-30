@@ -42,7 +42,10 @@ class PendidikanController extends Controller
             'nama_pendidikan'=>'required|unique:pendidikans'
         ]);
         Pendidikan::create($validateData);
-        return redirect()->route('pendidikan.index');
+        return redirect()->route('pendidikan.index')->with([
+            'css'=>'alert alert-success',
+            'status'=>"Data Pendidikan {$request->nama_pendidikan} Berhasil Ditambah ",
+            ]);
     }
 
     /**
@@ -81,7 +84,10 @@ class PendidikanController extends Controller
             'nama_pendidikan'=>'required|unique:pendidikans,nama_pendidikan,'.$pendidikan->id
         ]);
         $pendidikan->update($validateData);
-        return redirect()->route('pendidikan.index');
+        return redirect()->route('pendidikan.index')->with([
+            'css'=>'alert alert-warning',
+            'status'=>"Data Pendidikan {$request->nama_pendidikan} Berhasil Diubah ",
+            ]);
     }
 
     /**
@@ -94,6 +100,9 @@ class PendidikanController extends Controller
     {
         //
         $pendidikan->delete();
-        return redirect()->route('pendidikan.index');
+        return redirect()->route('pendidikan.index')->with([
+            'css'=>'alert alert-danger',
+            'status'=>"Data Pendidikan {$pendidikan->nama_pendidikan} Berhasil Dihapus ",
+            ]);
     }
 }
