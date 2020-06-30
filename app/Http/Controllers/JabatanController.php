@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jabatan;
 use Illuminate\Http\Request;
+use Log;
 
 class JabatanController extends Controller
 {
@@ -15,6 +16,8 @@ class JabatanController extends Controller
     public function index()
     {
         //
+        $data=Jabatan::all();
+        return view('pages.jabatan.index',compact('data'));
     }
 
     /**
@@ -36,6 +39,14 @@ class JabatanController extends Controller
     public function store(Request $request)
     {
         //
+        $validateData=$request->validate([
+            'nama_jabatan'=>'required|unique:jabatans',
+        ]);
+        Jabatan::create($validateData);
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-success',
+            'status'=>"Data Jabatan {$request->nama_jabatan} Berhasil Ditambah ",
+            ]);
     }
 
     /**
@@ -58,6 +69,8 @@ class JabatanController extends Controller
     public function edit(Jabatan $jabatan)
     {
         //
+        
+    
     }
 
     /**
@@ -70,6 +83,16 @@ class JabatanController extends Controller
     public function update(Request $request, Jabatan $jabatan)
     {
         //
+        Log::debug($request->all());
+        Log::debug($jabatan);
+        $validateData=$request->validate([
+            'nama_jabatan'=>'required|unique:jabatans,nama_jabatan,'.$jabatan->id,
+        ]);
+        $jabatan->update($validateData);
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-warning',
+            'status'=>"Data Jabatan {$request->nama_jabatan} Berhasil Diupdate ",
+            ]);
     }
 
     /**
@@ -81,5 +104,10 @@ class JabatanController extends Controller
     public function destroy(Jabatan $jabatan)
     {
         //
+        $jabatan->delete();
+        return redirect()->route('jabatan.index')->with([
+            'css'=>'alert alert-danger',
+            'status'=>"Data Jabatan {$jabatan->nama_jabatan} Berhasil Ditambah ",
+            ]);
     }
 }
